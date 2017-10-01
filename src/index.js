@@ -1,36 +1,42 @@
-// import './index.css';
-import io from 'socket.io-client';
-import draw from './draw'; 
-import translateKey from './translateKey';
+import io from 'socket.io-client'
+import installKeys from './installKeys'
+import store from './store'
+import chooseSideInPopup from './chooseSideInPopup'
+import updateGame from './updateGame'
+import { defineMyXLimits } from './updateMe/getMyXVel';
+require('./requestAnimationFramePolyfill')()
+require('./createCanvas').default()
 
-const socketUrl = (
-  // create-r-a sets NODE_ENV to production if run build/deploy
-	process.env.NODE_ENV === 'production' ?
-	'ploby-server.herokuapp.com' :
-	'localhost:5000'
-);
-
+const socketUrl = ( // create-r-a sets NODE_ENV to production if run build/deploy
+  process.env.NODE_ENV === 'production' ?
+  'ploby-server.herokuapp.com' :
+  'localhost:5000'
+)
 var socket = io(socketUrl);
-socket.on('app state changed', draw);
+updateGame.bindToSocket(socket)
 
-document.addEventListener('keydown', e => {
-  const key = translateKey(e.which)
-  if (key) {
-    socket.emit('player arrow event', {
-      type: 'keydown',
-      key
-    })    
-  }
-})
-document.addEventListener('keyup', e => {
-  const key = translateKey(e.which)
-  if (key) {
-    socket.emit('player arrow event', {
-      type: 'keyup',
-      key: translateKey(e.which)
-    })
-  }
-})
 
-// document.on
-// socket.emit('input', )
+socket.on(
+  'connection established',
+  async sideToPlay => {
+
+    sideToPlay = 'left'
+
+    // server created new game, as 1st player i should choose side
+    if (!sideToPlay) {
+      sideToPlay = await chooseSideInPopup()
+      socket.emit('player chose side', sideToPlay)
+    }
+
+    defineMyXLimits(sideToPlay)
+    store.setMyInitialPosition(sideToPlay)
+    installKeys()
+
+    updateGame.runFrame()
+  }
+)
+
+
+socket.on('message from enemy', data => {
+  store.applyEnemyData(data)
+})
