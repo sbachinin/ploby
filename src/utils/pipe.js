@@ -1,55 +1,35 @@
-import lodashReduce from 'lodash.reduce';
-import lodashIntersection from 'lodash.intersection'
+import clone from 'lodash.clonedeep';
+import warnIfPropsModified from './warnIfPropsModified';
+import throwErrorIfWrongType from './throwErrorIfWrongType';
+import warnAboutNoResult from './warnAboutNoResult';
 
-// Feed data sequentially to multiple functions.
-// Each function (adds new props) || (changes some props) of initial object.
-// (No risk of replacing entire data - only specific changes)
+// RUN MULTIPLE FUNCTIONS IN SEQUENCE,
+// GIVING THEM A STATE OBJECT
+// MERGE THE RETURN VALUE OF EACH FUNCTION INTO THIS OBJECT
+// WHEN THE RETURNED VALUE CONTAINS PROP 'PIPERESULT',
+// STOP ITERATING THROUGH ALL FUNCTIONS AND RETURN THIS PIPERESULT
 
 export default (fns, data) =>  {
-  return lodashReduce(
-    fns,
-    reducer,
-    data
-  )
+  let count = 0
+  let state = clone(data)
+  while (fns[count]) {
+    const returned = invokator(state, fns[count])
+    const haveFinalResult = returned && ('pipeResult' in returned)
+    if (haveFinalResult) {
+      // * final result can exist but be falsy
+      return returned.pipeResult
+    }
+    state = { ...state, ...returned }
+    count++
+  }
+  warnAboutNoResult()
 };
 
-function reducer(acc, fn) {
-  const result = fn(acc)
-  if (
-    typeof result !== 'undefined' &&
-    (typeof result !== 'object' || Array.isArray(result))
-  )  {
-    throw new TypeError(
-`Piped function should return an object OR undefined.
-${fn.name} returned ${JSON.stringify(result)}`)
-  }
-  
-  checkForModifiedProps(acc, result)
-
-  return { ...acc, ...result }
+function invokator(state, fn) {
+  const result = fn(state)
+  throwErrorIfWrongType(fn, result) // must be object || undefined
+  warnIfPropsModified(state, result)
+  return result
 }
 
-
-function checkForModifiedProps(acc, result) {
-  if (!result) return
-  const oldPropNames = Object.keys(acc)
-  const newPropNames = Object.keys(result)
-  const modifiedProps = lodashIntersection(oldPropNames, newPropNames)
-  if (modifiedProps.length > 0) {
-    const oldValues = modifiedProps
-    .map(prop => JSON.stringify(acc[prop]))
-    .join(',\n ')
-    const newValues = modifiedProps
-    .map(prop => JSON.stringify(acc[prop]))
-    .join(',\n ')
-    console.warn(
-`You are trying to modify a property that already exists in a piped object: 
-${modifiedProps.join(', ')}.
-Old values:
-${oldValues}
-New values:
-${newValues}
-It is not recommended`
-    );
-  }
-}
+export { log } from './pipeLog'

@@ -6,9 +6,12 @@ export default function(state) {
 
   const { ball, myself } = state
 
+  // Return new ball's vel ([x,y])
+  // if collision is found in one of this cases.
+  // Otherwise, return nothing
   return (
     bounceFromWalls(ball) ||
-    bounceFromMe(myself.position, ball.position) ||
+    bounceFromMe(ball, myself) ||
     bounceFromFences(ball)
   )
 }

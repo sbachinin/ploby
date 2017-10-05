@@ -1,4 +1,4 @@
-import xVelFns from './xVelFns';
+import xVelPipedFunctions from './xVelPipedFunctions';
 import pipe from '../utils/pipe';
 import {
   player as playerSettings,
@@ -16,19 +16,17 @@ export default ({
     position: [myXPos]
   }
 }) => {
-
   return pipe(
-    xVelFns,
-    {
-      leftKeyPressed,
+    xVelPipedFunctions,
+    { leftKeyPressed,
       rightKeyPressed,
       myXVel,
       myXPos,
       leftLimit,
-      rightLimit
+      rightLimit,
+      playerSettings
     }
-  ).newXVel
-
+  )
 };
 
 export const defineMyXLimits = (sideToPlay) =>  {

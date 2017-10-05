@@ -7,8 +7,8 @@ export default function(state) {
   return {
     velocity,
     position: [
-      state.myself.position[0] + velocity[0],
-      state.myself.position[1] + velocity[1]
+      state.myself.position[0] + (velocity[0] || 0),
+      state.myself.position[1] + (velocity[1] || 0)
     ]
   }
 }

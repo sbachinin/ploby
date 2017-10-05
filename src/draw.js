@@ -11,28 +11,28 @@ export default function(state) {
   c.clearRect(0, 0, canv.width, canv.height)
   drawPlayers(state.myself, state.enemy)
   drawBall(state.ball.position)
-  drawFenceTip()
+  // drawFenceTip()
   c.closePath()
 }
 
 
-function drawFenceTip() {
-  c.beginPath()
-  c.arc(
-    fences.leftX,
-    canv.height - fences.height,
-    fences.width / 2, 0, 2 * Math.PI)
-  c.fillStyle = '#a50000'
-  c.fill()
+// function drawFenceTip() {
+//   c.beginPath()
+//   c.arc(
+//     fences.leftX,
+//     canv.height - fences.height,
+//     fences.width / 2, 0, 2 * Math.PI)
+//   c.fillStyle = '#a50000'
+//   c.fill()
 
-  c.beginPath()
-  c.arc(
-    fences.rightX,
-    canv.height - fences.height,
-    fences.width / 2, 0, 2 * Math.PI)
-  c.fillStyle = '#a50000'
-  c.fill()
-}
+//   c.beginPath()
+//   c.arc(
+//     fences.rightX,
+//     canv.height - fences.height,
+//     fences.width / 2, 0, 2 * Math.PI)
+//   c.fillStyle = '#a50000'
+//   c.fill()
+// }
 
 function drawBall(ballPosition) {
   c.beginPath()

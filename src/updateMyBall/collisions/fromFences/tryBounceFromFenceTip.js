@@ -1,49 +1,36 @@
-import pipe from '../../../utils/pipe';
 import { ball as ballSettings, fences } from '../../../gameSettings'
-import findCirclesCollision from '../../../utils/findCollisionOfTwoCircles';
-import getVelAfterCollision from '../../../utils/getVelAfterCollision';
+import bounceIfOverlap from '../utils/bounceIfOverlap';
+import pipe from '../../../utils/pipe';
 
-export default ({ ball, closestFenceX }) =>  {
-  const bounceVel = pipe(
+// should return { bounceVel: [] }
+export default function({ nearFenceTip, ball, closestFenceX }) {
+  return pipe(
     [
-      prepareTwoCircles, // -> { circle1, circle2 }
-      findCirclesCollision, // -> { collisionIsFound: t/f, xDiff, yDiff, distance }
-      getVelAfterCollision // -> { bounceVel } || undefined
+      checkBallHeight, // -> ballIsNear
+      prepareCircle2, // -> { circle1, circle2 }
+      bounceIfOverlap, // -> { bounceVel: [] }
+      ({bounceVel}) => ({ pipeResult: { bounceVel } })
     ],
-    { ball, closestFenceX }
+    {
+      nearFenceTip,
+      ball,
+      closestFenceX,
+      sumBounceVel: ballSettings.reboundFromFenceTip
+    }
   )
-  .bounceVel
-  return { bounceVel }
 }
 
-function prepareTwoCircles({ ball, closestFenceX }) {
+function checkBallHeight({ nearFenceTip }) {
+  if (!nearFenceTip) return { pipeResult: null }
+}
+
+function prepareCircle2({ closestFenceX }) {
   return {
-    circle1: { position: ball.position, radius: ballSettings.radius},
     circle2: {
       position: [
         closestFenceX, fences.height
       ],
-      radius: fences.width / 2
+      radius: 0
     }
   }
 }
-
-//   const {
-//     xDiff, yDiff, distance, collisionIsFound
-//   } = findCirclesCollision({
-//     circle1: { position: ball.position, radius: ballSettings.radius},
-//     circle2: {
-//       position: [
-//         closestFenceX, fences.height
-//       ],
-//       radius: fences.width / 2
-//     }
-//   })
-//   return collisionIsFound && {
-//     bounceVel: getVelAfterCollision(
-//       xDiff,
-//       yDiff,
-//       distance,
-//       ballSettings.reboundFromFenceTip)
-//     }
-// };

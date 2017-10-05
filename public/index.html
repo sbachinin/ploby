@@ -31,12 +31,25 @@
         height: 100%;
       }
       #abyss {
-        display: block;
+        display: flex;
+        justify-content: space-between;
         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #e3ffdd 100%);
-        border: 0 solid #9b9b9b;
-        border-top: none;
-        border-bottom: none;
+      }
+      .fence {
+        width: 2%;
+        height: 100%;
+        background: #9b9b9b;
+        border-top: 3px solid;
+        border-top-left-radius: 5px;
+        border-color: red;
+        border-top-right-radius: 5px;
         box-sizing: border-box;
+      }
+      #leftFence {
+        margin-left: -1%;
+      }
+      #rightFence {
+        margin-left: 1%;
       }
       .hidden { display: none !important; }
       #chooseSideButtons {
@@ -73,7 +86,12 @@
     <div id="canvas-wrapper">
       <canvas id="root" class="hidden"></canvas>
       <div id="abyss-wrapper">
-        <div id="abyss"></div>
+        <div id="abyss">
+          <div class="fence" id="leftFence">
+          </div>
+          <div class="fence" id="rightFence">
+          </div>
+        </div>
       </div>
     </div>
     <div id="delay">delay: 1</div>

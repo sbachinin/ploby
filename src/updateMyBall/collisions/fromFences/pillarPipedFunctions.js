@@ -1,13 +1,20 @@
 import { ball as ballSettings } from '../../../gameSettings';
+// import { log } from '../../../utils/pipe';
 
 export default [
-  getXDiffFromBallCenter,
-  getXDiffFromBallSurface,
-  isTouchingFence,
-  isFlyingTowardsFence,
-  willCollide,
-  getBounceXVel,
+  checkBallHeight, // maybe exit
+  getXDiffFromBallCenter, // -> { xFromBallCenter }
+  getXDiffFromBallSurface, // -> { xFromBallSurface }
+  isTouchingFence, // -> { isTouchingFence } || undefined
+  isFlyingTowardsFence, // -> { towardsFence } || undefined
+  willCollide, // -> { willCollide } || undefined
+  getBounceXVel, // -> { pipeResult: { bounceVel } || undefined }
 ]
+
+
+function checkBallHeight({ nearFencePillar }) {
+  if (!nearFencePillar) return { pipeResult: null }
+}
 
 
 function getXDiffFromBallCenter({ closestFenceX, ballXPos }) {
@@ -66,13 +73,17 @@ function getBounceXVel({
   isTouchingFence,
   xFromBallSurface
 }) {
-  let bounceXVel
-      // if it is already touching, it should bounce
-  if (isTouchingFence === 'from left') bounceXVel = -ballSettings.reboundFromFencePillar
-  if (isTouchingFence === 'from right') bounceXVel = ballSettings.reboundFromFencePillar
-      // if ball is very close, it should 'touch' the fence
-  if (willCollide) bounceXVel = xFromBallSurface
-  return { bounceXVel }
+  if (isTouchingFence === 'from left') return {
+    pipeResult: -ballSettings.reboundFromFencePillar
+  }
+  if (isTouchingFence === 'from right') return {
+    pipeResult: ballSettings.reboundFromFencePillar
+  }
+    // if ball is very close, it should 'touch' the fence
+  if (willCollide) return {
+    pipeResult: xFromBallSurface
+  }
+  return { pipeResult: null }
 }
 
 

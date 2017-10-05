@@ -1,5 +1,11 @@
-const width = window.innerWidth > 880 ? 800 : window.innerWidth / 10 * 9
-const height = width / 2
+let width, height
+if (window.innerWidth / window.innerHeight > 2) {
+  height = window.innerHeight > 440 ? 400 : window.innerHeight / 10 * 9
+  width = height * 2
+} else {
+  width = window.innerWidth > 880 ? 800 : window.innerWidth / 10 * 9
+  height = width / 2
+}
 
 const canvasSize = {
   width,
@@ -27,10 +33,13 @@ module.exports = {
     ],
     leftLimit: ballRadius,
     rightLimit: canvasSize.width - ballRadius,
-    xDamping: 0.992,
-    gravity: canvasSize.height / 3000,
-    reboundFromPlayer: canvasSize.width / 50, // sum vel (hypotenuse of x&y vel)
-    reboundFromFenceTip: canvasSize.width / 300, // sum vel (hypotenuse of x&y vel)
+    xDamping: 0.993,
+    gravity: canvasSize.height / 3500,
+    // how fast the ball should fly when colliding with player (hypotenuse of x&y vel):
+    reboundFromPlayer: canvasSize.width / 1000, // 54
+    // also the hipotenuse:
+    reboundFromFenceTip: canvasSize.width / 300,
+    // only to change xVel:
     reboundFromFencePillar: canvasSize.width / 300,
     yDampingOnRaise: 0.95,
     yAccelerationOnFall: 1.03,
@@ -42,7 +51,9 @@ module.exports = {
     leftInitialX: (canvasSize.width - abyssWidth) / 4,
     rightInitialX: canvasSize.width - (canvasSize.width - abyssWidth) / 4,
     jumpingImpulse: canvasSize.height / 25,
-    flatteningDepth: canvasSize.height / 40,
+    // how deep the player flattens when hitting the ground? :
+    maxDepth: canvasSize.height / 40,
+    reboundFromGround: canvasSize.height / 200,
     maxXVel: canvasSize.width / 180,
     xDamping: canvasSize.width / 400,
     gravity: canvasSize.height / 1000,

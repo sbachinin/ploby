@@ -1,6 +1,4 @@
-import {
-  player
-} from '../gameSettings'
+import { player } from '../gameSettings'
 import pipe from '../utils/pipe';
 
 export default function({myself, jumpKeyPressed}) {
@@ -22,7 +20,6 @@ export default function({myself, jumpKeyPressed}) {
       jumpKeyPressed
     }
   )
-  .yVel
 }
 
 
@@ -37,11 +34,11 @@ function didFinallyRecoverFromFall ({ yPos, yVel }) {
 function willFinallyRecoverFromFall({ yPos, yVel }) {
   return { willFinallyRecoverFromFall: yPos < player.radius && (yPos + yVel) > player.radius } }
 function getYBeforeBottom({ yPos }) {
-  return { yBeforeBottom: yPos - player.radius + player.flatteningDepth } }
+  return { yBeforeBottom: yPos - player.radius + player.maxDepth } }
 function isHittingTheGround({ yBeforeBottom }) {
   return { isHittingTheGround: Math.abs(yBeforeBottom) < 0.0001 } }
 function willHitTheGround({ yBeforeBottom, yPos, yVel }) {
-  return { willHitTheGround: Math.abs(yVel) > yBeforeBottom } }
+  return { willHitTheGround: (yVel < 0) && Math.abs(yVel) > yBeforeBottom } }
 
 function getNewYVel({
   yVel, yPos, jumpKeyPressed,
@@ -51,19 +48,20 @@ function getNewYVel({
   isHittingTheGround, willHitTheGround,
   yBeforeBottom
 }) {
-  if (shouldJump) return { yVel: player.jumpingImpulse }
+  if (shouldJump) return { pipeResult: player.jumpingImpulse }
   if (isFlyingUp && jumpKeyPressed) return {
-    yVel: (yVel - player.gravity) * player.yDampingOnRaise
+    pipeResult: (yVel - player.gravity) * player.yDampingOnRaise
   }
   if (isFlyingUp) return {
-    yVel: (yVel - player.gravity * 3) * player.yDampingOnRaise
+    pipeResult: (yVel - player.gravity * 3) * player.yDampingOnRaise
   }
   if (isFlyingDown) return {
-    yVel: (yVel - player.gravity) * player.yAccelerationOnFall
+    pipeResult: (yVel - player.gravity) * player.yAccelerationOnFall
   }
-  if (willFinallyRecoverFromFall) return { yVel: player.radius - yPos }
-  if (didFinallyRecoverFromFall) return { yVel: 0 }
-  if (isHittingTheGround) return { yVel: 2 }
-  if (willHitTheGround) return { yVel: -yBeforeBottom }
+  if (willFinallyRecoverFromFall) return { pipeResult: player.radius - yPos }
+  if (didFinallyRecoverFromFall) return { pipeResult: 0 }
+  if (isHittingTheGround) return { pipeResult: player.reboundFromGround }
+  if (willHitTheGround) return { pipeResult: -yBeforeBottom }
+  return { pipeResult: yVel }
 }
 

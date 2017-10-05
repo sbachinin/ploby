@@ -1,44 +1,40 @@
-import pipe from '../../../utils/pipe'
-import compareHeight from './compareHeight';
+import pipe, {log } from '../../../utils/pipe'
 import tryBounceFromFenceTip from './tryBounceFromFenceTip';
 import tryBounceFromFencePillar from './tryBounceFromFencePillar';
 import { ball as ballSettings, fences, canvasSize } from '../../../gameSettings';
 
 export default function(ball) {
 
-  const result = pipe(
+  return pipe(
     [
-      getHeightRelativeToFence,
-      getClosestFenceX,
-      tryBounceFromFenceTip,
-      _ => console.log(_)
-      // tryBounceFromFencePillar
+      getHeightRelativeToFence, // -> { nearFenceTip, nearFencePillar } || exit
+      // d => console.log(d.nearFenceTip, d.nearFencePillar),
+      getClosestFenceX, // -> { closestFenceX }
+      tryBounceFromFenceTip, // -> { bounceVel: [] } || undef
+      tryBounceFromFencePillar, // -> { bounceVel: [] } || undef
+      // log('bounceVel'),
+      ({bounceVel}) => ({ pipeResult: bounceVel })
     ],
     { ball }
   )
-  .bounceVel
 }
-
-  // const closestFenceX = (
-  //   ball.position[0] > canvasSize.width / 2
-  // ) ? fences.rightX : fences.leftX
-  // switch (height) {
-  //   case 'near fence tip':
-  //     return bounceFromFenceTip(ball, closestFenceX)
-  //   case 'below fence tip':
-  //     return bounceFromFencePillar(ball, closestFenceX)
-  //   default: return
-  // }
 
 
 function getHeightRelativeToFence({ ball }) {
-  if (ball.position[1] < fences.height) {
-    return { heightRelativeToFence: 'below fence tip'}
+  if (ball.position[1] > (fences.height + ballSettings.radius)) {
+    return { pipeResult: null }
   }
+  let nearFenceTip, nearFencePillar
   if (
     ball.position[1] < (fences.height + ballSettings.radius) &&
-    ball.position[1] > fences.height
-  ) { return { heightRelativeToFence: 'near fence tip' } }
+    ball.position[1] > (fences.height - ballSettings.radius)
+  ) nearFenceTip = true
+  if (ball.position[1] < fences.height) nearFencePillar = true
+  return {
+    nearFenceTip, nearFencePillar
+  }
+  // *** 'near pillar' & 'near tip' intentionally overlap.
+  // Otherwise ball smtimes flies through the fence
 }
 
 function getClosestFenceX({ ball }) {
@@ -47,6 +43,7 @@ function getClosestFenceX({ ball }) {
     ) ? fences.rightX : fences.leftX
   }
 }
+
 
 
 // MEASURING TIME BETWEEN FENCES:

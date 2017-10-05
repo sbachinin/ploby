@@ -1,23 +1,27 @@
 import {ball as ballSettings, player as playerSettings} from '../../gameSettings'
-import findCollision from '../../utils/findCollisionOfTwoCircles';
-import getVelAfterCollision from '../../utils/getVelAfterCollision';
+import bounceIfOverlap from './utils/bounceIfOverlap';
+import pipe, {log} from '../../utils/pipe';
+
 // check if collision happened
 // if so, return new ball's vel
 
-export default function(myPos, ballPos) {
+export default function(ball, myself) {
+  return pipe(
+    [
+      prepareCircle2, // -> { circle1, circle2 }
+      bounceIfOverlap, // -> { bounceVel: [] }
+      ({bounceVel}) => ({ pipeResult: bounceVel })
+    ],
+    {
+      ball,
+      myself,
+      sumBounceVel: ballSettings.reboundFromPlayer
+    }
+  )
+}
 
-  const {
-    xDiff, yDiff, distance, collisionIsFound
-  } = findCollision({
-    circle1: { position: ballPos, radius: ballSettings.radius},
-    circle2: { position: myPos, radius: playerSettings.radius},
-  })
-
-  if (collisionIsFound) {
-    return getVelAfterCollision(
-      xDiff,
-      yDiff,
-      distance,
-      ballSettings.reboundFromPlayer)
+function prepareCircle2({ myself }) {
+  return {
+    circle2: { position: myself.position, radius: playerSettings.radius}
   }
 }
