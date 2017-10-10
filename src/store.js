@@ -2,10 +2,9 @@ import { canvasSize, player } from './gameSettings'
 import updateMe from './updateMe/updateMe'
 import updateMyBall from './updateMyBall/updateMyBall'
 
-let state = { myself: {} }
+let state = { myself: {}, enemy: {} }
 
 const store = {
-
 
   setMyInitialPosition(sideToPlay) {
     // if server didn't tell the side,
@@ -32,15 +31,17 @@ const store = {
       canvasSize.width / 100 * data.playerPositionPercentage[0],
       canvasSize.height / 100 * data.playerPositionPercentage[1] 
     ]
+    state.ball = data.ball
   },
 
   createMessageToEnemy() {
-    const { position } = state.myself
+    const { myself: { position }, ball } = state
     return {
       playerPositionPercentage: [
         (position[0] / canvasSize.width * 100).toFixed(4),
         (position[1] / canvasSize.height * 100).toFixed(4)
       ],
+      ball
       // ballPosition: state.ball.position
     }
   },

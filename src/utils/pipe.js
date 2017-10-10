@@ -1,8 +1,8 @@
 import clone from 'lodash.clonedeep';
 import warnIfPropsModified from './warnIfPropsModified';
-import throwErrorIfWrongType from './throwErrorIfWrongType';
+import checkReturnType from './checkReturnType';
 import warnAboutNoResult from './warnAboutNoResult';
-
+import checkRequiredProps from './checkRequiredProps';
 // RUN MULTIPLE FUNCTIONS IN SEQUENCE,
 // GIVING THEM A STATE OBJECT
 // MERGE THE RETURN VALUE OF EACH FUNCTION INTO THIS OBJECT
@@ -26,10 +26,12 @@ export default (fns, data) =>  {
 };
 
 function invokator(state, fn) {
+  checkRequiredProps(fn, state)
   const result = fn(state)
-  throwErrorIfWrongType(fn, result) // must be object || undefined
+  checkReturnType(fn, result) // must be object || undefined
   warnIfPropsModified(state, result)
   return result
 }
+
 
 export { log } from './pipeLog'

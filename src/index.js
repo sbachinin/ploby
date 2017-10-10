@@ -20,7 +20,7 @@ socket.on(
   'connection established',
   async sideToPlay => {
 
-    sideToPlay = 'left'
+    // sideToPlay = 'left'
 
     // server created new game, as 1st player i should choose side
     if (!sideToPlay) {

@@ -1,6 +1,6 @@
 import {ball as ballSettings, player as playerSettings} from '../../gameSettings'
 import bounceIfOverlap from './utils/bounceIfOverlap';
-import pipe, {log} from '../../utils/pipe';
+import pipe from '../../utils/pipe';
 
 // check if collision happened
 // if so, return new ball's vel

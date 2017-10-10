@@ -36,13 +36,10 @@ module.exports = {
     xDamping: 0.993,
     gravity: canvasSize.height / 3500,
     // how fast the ball should fly when colliding with player (hypotenuse of x&y vel):
-    reboundFromPlayer: canvasSize.width / 1000, // 54
-    // also the hipotenuse:
-    reboundFromFenceTip: canvasSize.width / 300,
-    // only to change xVel:
-    reboundFromFencePillar: canvasSize.width / 300,
+    reboundFromPlayer: canvasSize.width / 54,
     yDampingOnRaise: 0.95,
     yAccelerationOnFall: 1.03,
+    minBounceFromFenceTip: canvasSize.height / 300
   },
 
 

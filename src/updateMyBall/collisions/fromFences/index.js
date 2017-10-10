@@ -1,47 +1,83 @@
-import pipe, {log } from '../../../utils/pipe'
-import tryBounceFromFenceTip from './tryBounceFromFenceTip';
-import tryBounceFromFencePillar from './tryBounceFromFencePillar';
-import { ball as ballSettings, fences, canvasSize } from '../../../gameSettings';
+import pipe/*, {log }*/ from '../../../utils/pipe'
+import bounceIfReachedFenceTip from './bounceIfReachedFenceTip';
+import bounceIfReachedFencePillar from './bounceIfReachedFencePillar';
+import settings from '../../../gameSettings';
+import findCirclesOverlap from '../utils/findCirclesOverlap';
+
+let collisionInProcess = false
 
 export default function(ball) {
-
+  
   return pipe(
     [
-      getHeightRelativeToFence, // -> { nearFenceTip, nearFencePillar } || exit
-      // d => console.log(d.nearFenceTip, d.nearFencePillar),
-      getClosestFenceX, // -> { closestFenceX }
-      tryBounceFromFenceTip, // -> { bounceVel: [] } || undef
-      tryBounceFromFencePillar, // -> { bounceVel: [] } || undef
-      // log('bounceVel'),
+      getFencesClosestY, // -> { fencesClosestY } or exit & colInProcess = false
+      getFencesClosestX, // -> { fencesClosestX }
+      prepareSecondCircle, // -> { circle2 }
+      findCirclesOverlap, // -> { xDiff, yDiff, circlesOverlap }
+      exitIfNoOverlap, // maybe exit & colInProcess = false
+      bounceIfReachedFenceTip, // -> { bounceVel } || nothing
+      bounceIfReachedFencePillar, // -> { bounceVel } || nothing
+      ensureSingleCollision, // (collisionInProcess = t/f) & maybe exit
       ({bounceVel}) => ({ pipeResult: bounceVel })
     ],
-    { ball }
-  )
+    {
+      ball,
+      ballRadius: settings.ball.radius,
+      settings,
+    }
+  ) // -> [num, num] (bounce vel)
 }
 
 
-function getHeightRelativeToFence({ ball }) {
-  if (ball.position[1] > (fences.height + ballSettings.radius)) {
+export function getFencesClosestY({
+  ball: { position: [xPos, yPos] },
+  settings: {
+    fences: { height: fHeight },
+    ball: { radius: bRadius }
+  },
+}) {
+  if (
+    yPos < -bRadius ||
+    yPos > fHeight + bRadius
+  ) {
+    collisionInProcess = false
+    return { pipeResult: null }
+  } 
+  if (yPos > fHeight) return { fencesClosestY: fHeight }
+  return { fencesClosestY: yPos }
+}
+
+function prepareSecondCircle({
+  fencesClosestX, fencesClosestY
+}) {
+  return {
+    circle2: { position: [ fencesClosestX, fencesClosestY ], radius: 0 }
+  }
+}
+
+export function getFencesClosestX({ ball, settings }) {
+  return { fencesClosestX: (
+      ball.position[0] > settings.canvasSize.width / 2
+    ) ? settings.fences.rightX : settings.fences.leftX
+  }
+}
+
+
+function exitIfNoOverlap({ circlesOverlap }) {
+  if (!circlesOverlap) {
+    collisionInProcess = false
     return { pipeResult: null }
   }
-  let nearFenceTip, nearFencePillar
-  if (
-    ball.position[1] < (fences.height + ballSettings.radius) &&
-    ball.position[1] > (fences.height - ballSettings.radius)
-  ) nearFenceTip = true
-  if (ball.position[1] < fences.height) nearFencePillar = true
-  return {
-    nearFenceTip, nearFencePillar
-  }
-  // *** 'near pillar' & 'near tip' intentionally overlap.
-  // Otherwise ball smtimes flies through the fence
 }
 
-function getClosestFenceX({ ball }) {
-  return { closestFenceX: (
-      ball.position[0] > canvasSize.width / 2
-    ) ? fences.rightX : fences.leftX
+function ensureSingleCollision({ bounceVel }) {
+  // This prevents getting the ball stuck in the fence
+  // Initial bounce vel may be not enough to entirely break from fence
+  // So only the first collision frame should provide the bounce vel
+  if (bounceVel && collisionInProcess) {
+    return { pipeResult: null }
   }
+  if (bounceVel && !collisionInProcess) collisionInProcess = true
 }
 
 

@@ -7,11 +7,11 @@ export default ({
     velocity: [ballXVel, ballYVel]
   },
   nearFencePillar,
-  closestFenceX
+  fencesClosestX
 }) => {
   const bounceXVel = pipe(
     fns,
-    { ballXPos, ballXVel, closestFenceX, nearFencePillar }
+    { ballXPos, ballXVel, fencesClosestX, nearFencePillar }
   )
   return bounceXVel && {
     bounceVel: [ bounceXVel, ballYVel ]

@@ -3,7 +3,7 @@ import bounceIfOverlap from '../utils/bounceIfOverlap';
 import pipe from '../../../utils/pipe';
 
 // should return { bounceVel: [] }
-export default function({ nearFenceTip, ball, closestFenceX }) {
+export default function({ nearFenceTip, ball, fencesClosestX }) {
   return pipe(
     [
       checkBallHeight, // -> ballIsNear
@@ -14,7 +14,7 @@ export default function({ nearFenceTip, ball, closestFenceX }) {
     {
       nearFenceTip,
       ball,
-      closestFenceX,
+      fencesClosestX,
       sumBounceVel: ballSettings.reboundFromFenceTip
     }
   )
@@ -24,11 +24,11 @@ function checkBallHeight({ nearFenceTip }) {
   if (!nearFenceTip) return { pipeResult: null }
 }
 
-function prepareCircle2({ closestFenceX }) {
+function prepareCircle2({ fencesClosestX }) {
   return {
     circle2: {
       position: [
-        closestFenceX, fences.height
+        fencesClosestX, fences.height
       ],
       radius: 0
     }

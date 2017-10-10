@@ -1,8 +1,7 @@
 import {
   player,
   canvasSize as canv,
-  ball,
-  fences,
+  ball
 } from './gameSettings'
 const c = document.getElementById('root').getContext('2d');
 
