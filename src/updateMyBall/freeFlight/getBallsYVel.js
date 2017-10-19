@@ -1,21 +1,21 @@
-import {
-  ball
-} from '../../gameSettings'
+// @flow
 
-export default function({
-  ball: {
-    position: [xPos, yPos],
-    velocity: [xVel, yVel]
-  }
-}, collisionYDiff) {
+import { getSetting } from '../../settings';
 
+export default function(
+  { ball } : { ball: { velocity: Array<number> } }, 
+  collisionYDiff : number
+) : number {
+
+  const yVel = ball.velocity[1]
   const dir = getDirection(yVel)
+  const { gravity, yDampingOnRaise, yAccelerationOnFall } = getSetting('ball')
 
   switch (dir) {
     case 'GOING_UP':
-      return (yVel - ball.gravity) * ball.yDampingOnRaise
+      return (yVel - gravity) * yDampingOnRaise
     case 'GOING_DOWN':
-      return (yVel - ball.gravity) * ball.yAccelerationOnFall
+      return (yVel - gravity) * yAccelerationOnFall
     default: return yVel
   }
 

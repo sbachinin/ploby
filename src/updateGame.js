@@ -1,7 +1,8 @@
 import store from './store'
-import draw from './draw'
+import {draw} from './canvas/'
 import throttle from 'lodash.throttle'
 import { runWithIntervals } from './devUtils'
+import createMessageToEnemy from './createMessageToEnemy';
 
 // 1) calc new my ball & own position,
 // 2) draw all game state (incl. enemy) on canvas
@@ -12,7 +13,9 @@ let socket
 function runFrame(socket) {
 
   runWithIntervals(_ => {
-    draw(store.updateMeAndBall())
+    store.updateMeAndBall()
+    draw(store.getState())
+    // socket.sendRegularMessageToEnemy()
     throttledSendMessage()
   })
 
@@ -22,7 +25,7 @@ function runFrame(socket) {
 
 const throttledSendMessage = throttle(
   _ => {
-    socket.emit('message from player', store.createMessageToEnemy())
+    socket.emit('message from player', createMessageToEnemy())
   },
   1000  / 30
 )

@@ -9,6 +9,7 @@
     "lodash.intersection": "^4.4.0",
     "lodash.reduce": "^4.6.0",
     "lodash.throttle": "^4.1.1",
+    "object-path": "^0.11.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.12",

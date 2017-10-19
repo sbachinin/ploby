@@ -1,8 +1,14 @@
-import { ball } from '../gameSettings'
+// @flow
 
-export default function(side) {
+import { getSetting } from '../settings';
+
+export default function(side : string) {
   return {
     velocity: [ 0, 0 ],
-    position: side === 'right' ? ball.rightInitialPos : ball.leftInitialPos,
+    position: (
+      side === 'right' ?
+      getSetting('ball.rightInitialPos') :
+      getSetting('ball.leftInitialPos')
+    )
   }
 }

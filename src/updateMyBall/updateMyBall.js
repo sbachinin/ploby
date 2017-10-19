@@ -4,9 +4,9 @@ import getNewBall from './getNewBall'
 
 export default function(state) {
 
-  if (!state.ball || state.ball.position[1] < -500) {
-    return getNewBall()
-  }
+  // if (!state.ball || state.ball.position[1] < -500) {
+  //   return getNewBall()
+  // }
   const velocity = (
     getBouncingVel(state) ||
     getRoutineVel(state)
@@ -18,6 +18,7 @@ export default function(state) {
   ]
 
   return {
+    ...state.ball,
     velocity,
     position
   }

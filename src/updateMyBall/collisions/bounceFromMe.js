@@ -1,11 +1,13 @@
-import {ball as ballSettings, player as playerSettings} from '../../gameSettings'
+// @flow
+
+import { getSetting } from '../../settings';
 import bounceIfOverlap from './utils/bounceIfOverlap';
 import pipe from '../../utils/pipe';
 
 // check if collision happened
 // if so, return new ball's vel
 
-export default function(ball, myself) {
+export default function(ball: {}, myself: {}) {
   return pipe(
     [
       prepareCircle2, // -> { circle1, circle2 }
@@ -15,13 +17,13 @@ export default function(ball, myself) {
     {
       ball,
       myself,
-      sumBounceVel: ballSettings.reboundFromPlayer
+      sumBounceVel: getSetting('ball.reboundFromPlayer')
     }
   )
 }
 
 function prepareCircle2({ myself }) {
   return {
-    circle2: { position: myself.position, radius: playerSettings.radius}
+    circle2: { position: myself.position, radius: getSetting('player.radius')}
   }
 }

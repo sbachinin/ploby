@@ -1,7 +1,15 @@
-import { player } from '../gameSettings'
+// @flow
+import { getSetting } from '../settings'
 import pipe from '../utils/pipe';
 
-export default function({myself, jumpKeyPressed}) {
+type Args = {
+  myself: {
+    position: Array<number>, velocity: Array<number>
+  },
+  jumpKeyPressed: boolean
+}
+
+export default function({ myself, jumpKeyPressed } : Args) {
   return pipe(
     [
       shouldJump,
@@ -17,23 +25,24 @@ export default function({myself, jumpKeyPressed}) {
     {
       yVel: myself.velocity[1],
       yPos: myself.position[1],
-      jumpKeyPressed
+      jumpKeyPressed,
+      player: getSetting('player')
     }
   )
 }
 
 
-function shouldJump({ jumpKeyPressed, yPos }) {
+function shouldJump({ jumpKeyPressed, yPos, player }) {
   return { shouldJump: yPos <= player.radius && jumpKeyPressed } }
-function isFlyingUp({ yVel, yPos }) {
+function isFlyingUp({ yVel, yPos, player }) {
   return { isFlyingUp: yPos > player.radius && yVel > 0 } }
-function isFlyingDown({ yVel, yPos }) {
+function isFlyingDown({ yVel, yPos, player }) {
   return { isFlyingDown: yPos > player.radius && yVel < 0 } }
-function didFinallyRecoverFromFall ({ yPos, yVel }) {
+function didFinallyRecoverFromFall ({ yPos, yVel, player }) {
   return { didFinallyRecoverFromFall: Math.abs(yPos - player.radius) < 0.0001 && yVel > 0 } }
-function willFinallyRecoverFromFall({ yPos, yVel }) {
+function willFinallyRecoverFromFall({ yPos, yVel, player }) {
   return { willFinallyRecoverFromFall: yPos < player.radius && (yPos + yVel) > player.radius } }
-function getYBeforeBottom({ yPos }) {
+function getYBeforeBottom({ yPos, player }) {
   return { yBeforeBottom: yPos - player.radius + player.maxDepth } }
 function isHittingTheGround({ yBeforeBottom }) {
   return { isHittingTheGround: Math.abs(yBeforeBottom) < 0.0001 } }
@@ -46,7 +55,7 @@ function getNewYVel({
   didFinallyRecoverFromFall,
   willFinallyRecoverFromFall,
   isHittingTheGround, willHitTheGround,
-  yBeforeBottom
+  yBeforeBottom, player
 }) {
   if (shouldJump) return { pipeResult: player.jumpingImpulse }
   if (isFlyingUp && jumpKeyPressed) return {

@@ -1,12 +1,14 @@
+// @flow
+
 import pipe/*, {log }*/ from '../../../utils/pipe'
 import bounceIfReachedFenceTip from './bounceIfReachedFenceTip';
 import bounceIfReachedFencePillar from './bounceIfReachedFencePillar';
-import settings from '../../../gameSettings';
+import { getAllSettings, getSetting } from '../../../settings';
 import findCirclesOverlap from '../utils/findCirclesOverlap';
 
 let collisionInProcess = false
 
-export default function(ball) {
+export default function(ball: {}) : Array<number> {
   
   return pipe(
     [
@@ -22,10 +24,10 @@ export default function(ball) {
     ],
     {
       ball,
-      ballRadius: settings.ball.radius,
-      settings,
+      ballRadius: getSetting('ball.radius'),
+      settings: getAllSettings(),
     }
-  ) // -> [num, num] (bounce vel)
+  )
 }
 
 
@@ -35,6 +37,9 @@ export function getFencesClosestY({
     fences: { height: fHeight },
     ball: { radius: bRadius }
   },
+}: {
+  ball: { position: Array<number> },
+  settings: { fences: { height: number }, ball: { radius: number }}
 }) {
   if (
     yPos < -bRadius ||
@@ -50,14 +55,20 @@ export function getFencesClosestY({
 function prepareSecondCircle({
   fencesClosestX, fencesClosestY
 }) {
+  // second circle is just a closest point on circle
+  // to use circle-circle collision method
   return {
     circle2: { position: [ fencesClosestX, fencesClosestY ], radius: 0 }
   }
 }
 
-export function getFencesClosestX({ ball, settings }) {
+export function getFencesClosestX({
+  ball, settings
+} : {
+  ball: { position: Array<number> }, settings: { fences: { leftX: number, rightX: number } }
+}) {
   return { fencesClosestX: (
-      ball.position[0] > settings.canvasSize.width / 2
+      ball.position[0] > 50
     ) ? settings.fences.rightX : settings.fences.leftX
   }
 }

@@ -1,10 +1,10 @@
-import { ball } from '../../gameSettings'
+// @flow
 
-export default function({
-  ball: {
-    velocity: [xVel]
-  },
+import { getSetting } from '../../settings';
+
+export default function({ ball } : {
+  ball: { velocity: Array<number> }
 }) {
-  return xVel * ball.xDamping
+  return ball.velocity[0] * getSetting('ball.xDamping')
 }
 

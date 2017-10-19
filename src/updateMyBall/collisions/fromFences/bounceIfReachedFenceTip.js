@@ -1,9 +1,13 @@
+// @flow
+
 import getBounceFromCircle from '../utils/getBounceFromCircle';
-import settings from '../../../gameSettings';
+import { getAllSettings } from '../../../settings';
 import pipe from '../../../utils/pipe';
 
 function bounceIfReachedFenceTip({
   fencesClosestY, xDiff, yDiff, ball
+} : {
+  fencesClosestY: number, xDiff: number, yDiff: number, ball: {}
 }) {
   return pipe(
     [
@@ -13,7 +17,7 @@ function bounceIfReachedFenceTip({
       ({bounceVel}) => ({ pipeResult: { bounceVel } })
     ],
     {
-      fencesClosestY, settings, xDiff, yDiff, ball
+      fencesClosestY, settings: getAllSettings(), xDiff, yDiff, ball
     }
   )
 }
@@ -28,7 +32,16 @@ bounceIfReachedFenceTip.requiredProps = {
 export default bounceIfReachedFenceTip
 
 
-export function getSumBounceFromTip({ ball, settings }) {
+export function getSumBounceFromTip({
+  ball, settings
+} : {
+  ball: {
+    velocity: Array<number>
+  },
+  settings: {
+    ball: { minBounceFromFenceTip: number }
+  }
+}) {
   let sumBounceVel = Math.sqrt(
     ball.velocity[0]*ball.velocity[0] + ball.velocity[1]*ball.velocity[1]
   ) / 3

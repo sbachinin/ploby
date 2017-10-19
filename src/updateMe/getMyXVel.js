@@ -1,21 +1,28 @@
+// @flow
+
 import xVelPipedFunctions from './xVelPipedFunctions';
 import pipe from '../utils/pipe';
-import {
-  player as playerSettings,
-  fences as fencesSettings,
-  canvasSize
-} from '../gameSettings';
-let leftLimit
-let rightLimit
+import { getSetting } from '../settings';
+
+type Args = { leftKeyPressed: boolean,
+  rightKeyPressed: boolean,
+  myself: {
+    velocity: Array<number>,
+    position: Array<number>,
+    leftLimit: number,
+    rightLimit: number
+  } }
 
 export default ({
   leftKeyPressed,
   rightKeyPressed,
   myself: {
     velocity: [myXVel],
-    position: [myXPos]
+    position: [myXPos],
+    leftLimit,
+    rightLimit
   }
-}) => {
+} : Args) => {
   return pipe(
     xVelPipedFunctions,
     { leftKeyPressed,
@@ -24,16 +31,7 @@ export default ({
       myXPos,
       leftLimit,
       rightLimit,
-      playerSettings
+      playerSettings: getSetting('player')
     }
   )
-};
-
-export const defineMyXLimits = (sideToPlay) =>  {
-  leftLimit = sideToPlay === 'left' ?
-    playerSettings.radius :
-    (fencesSettings.rightX + fencesSettings.width / 2 + playerSettings.radius)
-  rightLimit = sideToPlay === 'left' ?
-    (fencesSettings.leftX - fencesSettings.width / 2 - playerSettings.radius) :
-    (canvasSize.width - playerSettings.radius)
 };

@@ -5,6 +5,7 @@ export default function(state) {
   const velocity = getMyVel({...state})
 
   return {
+    ...state.myself,
     velocity,
     position: [
       state.myself.position[0] + (velocity[0] || 0),
