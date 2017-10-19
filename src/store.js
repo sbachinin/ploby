@@ -66,29 +66,6 @@ const store = {
   },
 
 
-  applyEnemyData({ playerData, ballData } : {
-    playerData?: { posPercentage: Array<number> },
-    ballData?: { posPercentage: Array<number>, velPercentage: Array<number> }
-  }) {
-    if (!playerData) return
-
-    const { posPercentage: [pX, pY]} = playerData
-    const enemy = {
-      ...state.enemy,
-      position: [ pX, pY ]
-    }
-    if (!ballData) { this.applyNewData({ enemy }); return }
-
-    const { posPercentage: [bpX, bpY], velPercentage: [bvX, bvY] } = ballData
-    const ball = {
-      ...state.ball,
-      position: [ bpX, bpY ],
-      velocity: [ bvX, bvY ]
-    }
-    this.applyNewData({ enemy, ball })
-  },
-
-
   startJumping() {
     this.applyNewData({
       jumpKeyPressed: true
