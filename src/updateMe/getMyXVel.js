@@ -1,7 +1,7 @@
 // @flow
 
 import xVelPipedFunctions from './xVelPipedFunctions';
-import pipe from '../utils/pipe';
+import pipe from 'pipeduce';
 import { getSetting } from '../settings';
 
 type Args = { leftKeyPressed: boolean,

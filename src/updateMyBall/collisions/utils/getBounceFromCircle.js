@@ -1,4 +1,4 @@
-import pipe from '../../../utils/pipe';
+import pipe from 'pipeduce';
 import getMagnitude from './getMagnitude';
 
 export default getBounceFromCircle

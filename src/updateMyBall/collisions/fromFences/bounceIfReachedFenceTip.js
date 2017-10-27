@@ -2,7 +2,7 @@
 
 import getBounceFromCircle from '../utils/getBounceFromCircle';
 import { getAllSettings } from '../../../settings';
-import pipe from '../../../utils/pipe';
+import pipe from 'pipeduce';
 
 function bounceIfReachedFenceTip({
   fencesClosestY, xDiff, yDiff, ball

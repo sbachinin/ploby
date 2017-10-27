@@ -1,6 +1,6 @@
 // @flow
 
-import pipe/*, {log }*/ from '../../../utils/pipe'
+import pipe from 'pipeduce'
 import bounceIfReachedFenceTip from './bounceIfReachedFenceTip';
 import bounceIfReachedFencePillar from './bounceIfReachedFencePillar';
 import { getAllSettings, getSetting } from '../../../settings';

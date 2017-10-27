@@ -2,12 +2,9 @@
 
 import { getSetting } from '../../settings';
 
-export default function(
-  { ball } : { ball: { velocity: Array<number> } }, 
-  collisionYDiff : number
-) : number {
+export default function(velocity: Array<number>) : number {
 
-  const yVel = ball.velocity[1]
+  const yVel = velocity[1]
   const dir = getDirection(yVel)
   const { gravity, yDampingOnRaise, yAccelerationOnFall } = getSetting('ball')
 
@@ -18,7 +15,6 @@ export default function(
       return (yVel - gravity) * yAccelerationOnFall
     default: return yVel
   }
-
 }
 
 

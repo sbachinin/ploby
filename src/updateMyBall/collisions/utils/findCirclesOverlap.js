@@ -1,6 +1,6 @@
 // @flow
 
-import pipe from '../../../utils/pipe.js';
+import pipe from 'pipeduce';
 import getMagnitude from './getMagnitude';
 
 type BallType = {}

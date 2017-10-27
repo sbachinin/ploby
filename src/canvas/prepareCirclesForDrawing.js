@@ -24,7 +24,7 @@ export default (
     return {
       positionPx: [
         toPx(cw, state[key].position[0]),
-        canvasSize.height - (toPx(cw, state[key].position[1]))
+        ch - (toPx(cw, state[key].position[1]))
       ],
       radiusPx: (
         key === 'ball' ?

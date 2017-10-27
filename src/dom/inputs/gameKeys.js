@@ -1,6 +1,6 @@
-import store from './store'
+import store from '../../store'
 
-export default function() {
+export function installGameKeys() {
 
   document.addEventListener('keydown', e => {
     if (e.which === 37) {

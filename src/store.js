@@ -1,25 +1,50 @@
 // @flow
 
-import { getSetting } from './settings';
+import { getSetting, getPlayerInitialPos, definePlayerLimits } from './settings';
 import updateMe from './updateMe/updateMe'
 import updateMyBall from './updateMyBall/updateMyBall'
 import getNewBall from './updateMyBall/getNewBall';
 
-let state : {
-  ball?: { position: Array<number>, velocity: Array<number> },
+export type Ball = {
+  position: Array<number>,
+  velocity: Array<number>,
+  landed: boolean
+}
+
+export type State = {
+  ball?: Ball,
   myself?: { position: Array<number>, velocity: Array<number>, sideToPlay: string },
   enemy?: { position: Array<number> },
   jumpKeyPressed?: boolean,
   leftKeyPressed?: boolean,
-  rightKeyPressed?: boolean
-} = {}
+  rightKeyPressed?: boolean,
+  gameState: 'playing' | 'game over' | 'choose side' | 'hello window locked' | 'can close hello window'
+}
+
+
+let state : State = { gameState: 'hello window locked' }
 
 
 const store = {
 
-  setBallOnEnemySide() {
-    if (!state.myself) return
-    const side = state.myself.sideToPlay === 'left' ? 'right' : 'left'
+  addEnemy() {
+    // should draw enemy and ball on ememy's side
+
+    const enemySide = state.myself && state.myself.sideToPlay === 'left' ? 'right' : 'left'
+    
+    this.applyNewData({
+      ball: getNewBall(enemySide),
+      enemy: { position: getPlayerInitialPos(enemySide) }
+    })
+  },
+
+
+  setBallOnMySide() {
+    this.setBallOnSide(state.myself && state.myself.sideToPlay)
+  },
+
+
+  setBallOnSide(side: string) {
     this.applyNewData({
       ball: getNewBall(side)
     })
@@ -34,35 +59,34 @@ const store = {
   },
 
 
-  setInitialState(sideToPlay: string) {
-    // if server didn't tell the side,
-    // choose it in modal window
-    // then calculate inital position
-    // and resolve promise to start drawing
-    const player = getSetting('player')
+  setInitialState(sideToPlay?: string) {
+    if (!sideToPlay) {
+      if (!state.myself) return
+      // case for resetting all after game over
+      sideToPlay = state.myself.sideToPlay
+    }
+
     const { leftX: leftFenceX, rightX: rightFenceX } = getSetting('fences')
-    const position = sideToPlay === 'left' ?
-    [player.leftInitialX, player.radius] :
-    [player.rightInitialX, player.radius]
-    
-    const leftLimit = sideToPlay === 'left' ?
-    player.radius :
-    (rightFenceX + player.radius)
-    const rightLimit = sideToPlay === 'left' ?
-    (leftFenceX - player.radius) :
-    (100 - player.radius)
+    const limits = definePlayerLimits(sideToPlay)
+    if (!limits) return
 
     this.applyNewData({
       myself: {
         sideToPlay,
-        position,
+        position: getPlayerInitialPos(sideToPlay),
         velocity: [0, 0],
-        leftLimit,
-        rightLimit
+        leftLimit: limits.leftLimit,
+        rightLimit: limits.rightLimit
       },
       // when every new player enters game, the ball is put on his side
-      ball: getNewBall(sideToPlay)
+      ball: getNewBall(sideToPlay),
+      enemy: null
     })
+  },
+
+
+  clearState() {
+    state = {}
   },
 
 
@@ -99,6 +123,9 @@ const store = {
     })
   },
 
+  isEmpty() {
+    return !state.myself
+  },
 
   updateMeAndBall() {
     this.applyNewData({

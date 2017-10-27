@@ -1,5 +1,4 @@
 import fns from '../src/updateMe/xVelPipedFunctions';
-import { getSetting } from '../src/settings';
 
 const [
   relaxIfStanding,
@@ -25,7 +24,7 @@ test('should accelerate if key pressed', () => {
   const data = {
     rightKeyPressed: true,
     myXVel: 4,
-    getSetting('player')
+    playerSettings: { xAcceleration: 4, maxXVel: 10 }
   }
   const result = accelerateIfKeyPressed(data)
   expect(result).toBeDefined()

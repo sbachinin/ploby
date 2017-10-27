@@ -5,79 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="all.css">
     <title>Ploby</title>
-    <style>
-      body {
-        text-align: center;
-        overflow: hidden;
-      }
-      #root {
-        display: block;
-        border: 1px solid gray;
-      }
-      #canvas-wrapper {
-        display: inline-block;
-        position: relative;
-      }
-      #abyss-wrapper {
-        position: absolute;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        z-index: 1;
-        bottom: 1px;
-        width: 100%;
-        height: 100%;
-      }
-      #abyss {
-        display: flex;
-        justify-content: space-between;
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #ADCCA5 100%);
-      }
-      .fence {
-        width: 2%;
-        height: 100%;
-        background: #9b9b9b;
-        border-top: 3px solid;
-        border-top-left-radius: 5px;
-        border-color: red;
-        border-top-right-radius: 5px;
-        box-sizing: border-box;
-      }
-      .hidden { display: none !important; }
-      #chooseSideButtons {
-        background: rgba(0,0,0,0.5);
-        position: absolute;
-        z-index: 2;
-        top: 0px;
-        left: 0px;
-        width: 100vw;
-        height: 100vh;
-        line-height: 100vh;
-        text-align: center;
-        font-family: georgia;
-        color: peachpuff;
-        font-size: 28px;
-      }
-      #chooseSideButtons button {
-        cursor: pointer;
-        padding: 8px 15px 6px;
-        margin-left: 15px;
-        border: none;
-        font-weight: bold;
-        transform: translateY(-2px);
-        font-size: 20px;
-      }
-    </style>
   </head>
   <body>
-    <div id="chooseSideButtons" class="hidden">
-      Choose side:
-      <button>LEFT</button>
-      <button>RIGHT</button>
+    <div id="helloOverlay">
+      <p>ploby volley</p>
+      <img src="players.jpg" style="height: 350px; max-height: 50vh" alt="">
+      <div id="preloaderWrapper">
+        <img src="preloader.gif" alt="">
+      </div>
+    </div>
+    <div id="chooseSideWindow" class="hidden">
+      <p>Choose side</p>
+      <div id="buttons">
+        <button class="active" id='leftSideButton'>Left</button>
+        <button id='rightSideButton'>Right</button>
+      </div>
     </div>
     <div id="canvas-wrapper">
+      <div class="score" id="leftScore">0</div>
+      <div class="score" id="rightScore">0</div>
       <canvas id="root" class="hidden"></canvas>
       <div id="abyss-wrapper">
         <div id="abyss">
@@ -85,9 +35,27 @@
           </div>
           <div class="fence" id="rightFence">
           </div>
+          <div id="messages">
+            <div id="delay">delay: 1</div>
+            <div id="reconnectMessage"></div>
+          </div>
         </div>
       </div>
     </div>
-    <div id="delay">delay: 1</div>
+    <div id="gameOverWindow" class='hidden'>
+      <div id="winnerMessage">
+        <p>You win
+          <span>press any key or click</span>
+        </p>
+        <img src="nudeMaja.jpg" />
+      </div>
+      <div id="looserMessage">
+        <p>You loose
+          <span>press any key or click</span>
+        </p>
+        <img src="dressedMaja.jpg" />
+      </div>
+    </div>
+    <img id="ballImg" src="circle2.png" style="display:none" />
   </body>
 </html>

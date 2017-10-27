@@ -8,7 +8,7 @@ type Args = {
 export default function({
   position: [xPos],
   velocity: [xVel, yVel]
-} : Args) {
+} : Args) : ?Array<number> {
   if (
     xPos >= getSetting('ball.rightLimit') ||
     xPos <= getSetting('ball.leftLimit')

@@ -4,7 +4,7 @@
 // If overlaps, get new ball's vel considering
 // 1) angle of collision,
 // 2) sum bounce vel for this type of collision
-import pipe from '../../../utils/pipe';
+import pipe from 'pipeduce';
 import { getSetting } from '../../../settings';
 import findCirclesOverlap from './findCirclesOverlap';
 import getBounceFromCircle from './getBounceFromCircle';

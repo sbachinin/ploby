@@ -1,6 +1,6 @@
 // @flow
 import { getSetting } from '../settings'
-import pipe from '../utils/pipe';
+import pipe from 'pipeduce';
 
 type Args = {
   myself: {
