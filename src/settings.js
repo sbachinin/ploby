@@ -1,17 +1,18 @@
 // @flow
 import objectPath from 'object-path';
+import spareSettings from './spareSettings';
 
-type Settings = {
-  fences?: { height: number, leftX: number, rightX: number },
-  player?: { leftInitialX: number, rightInitialX: number, radius: number },
-  ball?: { radius: number },
-  abyssWidth?: number,
-  heightToWidthRatio?: number,
-  maxCanvasHeight?: number,
-  maxCanvasWidth?: number
+export type Settings = {
+  fences: { height: number, leftX: number, rightX: number },
+  player: { leftInitialX: number, rightInitialX: number, radius: number },
+  ball: { radius: number },
+  abyssWidth: number,
+  heightToWidthRatio: number,
+  maxCanvasHeight: number,
+  maxCanvasWidth: number
 }
 
-let settings : Settings = {}
+let settings : Settings = spareSettings
 
 export const setSettings = (settingsFromServer: Settings) => {
   settings = settingsFromServer
@@ -21,8 +22,7 @@ export const getAllSettings = () => settings
 
 export const getSetting = (path: string) => objectPath.get(settings, path)
 
-export const getPlayerInitialPos = (side: string) =>  {
-  if (!settings.player) return
+export const getPlayerInitialPos = (side: string): Array<number> =>  {
   const leftX = settings.player.leftInitialX
   const rightX = settings.player.rightInitialX
   return [
@@ -31,9 +31,10 @@ export const getPlayerInitialPos = (side: string) =>  {
   ]
 };
 
-export const definePlayerLimits = (side: string) => {
+export const definePlayerLimits = (side: string): {
+  leftLimit: number, rightLimit: number
+} => {
   const { player, fences } = settings
-  if (!player || !fences) return
   return {
     leftLimit: (
       side === 'left' ?

@@ -1,5 +1,14 @@
 // @flow
 
-import socket from './socket';
+import { connect } from './connection/socket';
+import vueApp from './render/secondaryWindows/vueApp';
+import { startFrames } from './game'
+import { initKeys }from './inputs/'
+
 require('./requestAnimationFramePolyfill')()
-socket.start()
+
+vueApp.init()
+
+connect().then(startFrames)
+
+initKeys()

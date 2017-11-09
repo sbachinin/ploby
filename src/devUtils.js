@@ -12,10 +12,8 @@ export function runWithIntervals(fn) {
   }
 }
 
-const delay = document.getElementById('delay')
 document.addEventListener('keypress', e => {
   if (e.which === 97) frameInterval += 1
   if (e.which === 113 && frameInterval > 1) frameInterval -= 1
-  delay.innerText = 'delay: ' + frameInterval
   return true
 })
