@@ -13,7 +13,7 @@ export default (state: State) => {
     }
   }
 
-  if (!state.canvasState.ball.controlledByEnemy) {
+  if (!state.canvasState.ball.controlledByEnemy && !state.canvasState.ball.transferInProcess) {
     message.ball = pick(
       state.canvasState.ball,
       ['velocity', 'position', 'newCollisionWith', 'kickedFirstTime']

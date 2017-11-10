@@ -69,12 +69,12 @@ canvas {
   margin: 0;
 }
 .fence {
-  width: 2%;
+  width: 3%;
   height: 100%;
-  background: #b48484;
+  background: #599ba7;
   border-top: 3px solid;
   border-top-left-radius: 5px;
-  border-color: #b48484;
+  border-color: #599ba7;
   border-top-right-radius: 5px;
   box-sizing: border-box;
 }

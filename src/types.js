@@ -25,6 +25,7 @@ export type Ball = {
   velocity: Array<number>,
   landed: boolean,
   flightHistory: Array<'abyss' | 'left' | 'right'>
+  transferInProcess?: boolean
 }
 
 export type Myself = {

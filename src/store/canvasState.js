@@ -4,6 +4,7 @@ import type { State, CanvasState } from '../types'
 import updateMyself, { getInitialPlayer } from './updateMyself/';
 import getNewBall from './updateBall/getNewBall';
 import updateBall from './updateBall/';
+import tryApplyEnemyBall from './updateBall/tryApplyEnemyBall';
 import _ from 'lodash'
 
 export default function(action: any, state: State) : CanvasState {
@@ -38,10 +39,11 @@ export default function(action: any, state: State) : CanvasState {
       }
     }
     case 'APPLY_ENEMY_DATA': {
+      const ball = tryApplyEnemyBall(canvasState.ball, action.ball)
       return {
         ...canvasState,
         enemy: Object.assign({}, canvasState.enemy, action.enemy),
-        ball: Object.assign({}, canvasState.ball, action.ball)
+        ball
       }
     }
 
@@ -68,8 +70,7 @@ export default function(action: any, state: State) : CanvasState {
       }
       return {
         ...canvasState,
-        ball: getNewBall(side),
-        enemy: { ...canvasState.enemy, absent: true }
+        ball: getNewBall(side)
       }
     }
 

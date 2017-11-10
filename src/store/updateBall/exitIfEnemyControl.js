@@ -1,12 +1,15 @@
 // @flow
 
 export default function exitIfEnemyControl(
-  { enemy, ball, mySide, flightZone, flightHistory } : any
+  { enemy, ball, mySide, flightZone, flightHistory, ballJustLeftMySide } : any
 ) {
   // I should update & send ball only if:
   // 1) ball is on my side or
   // 2) ball is over abyss & it's flying from enemy to me
+
   if (!enemy) return
+
+  if (ballJustLeftMySide || ball.transferInProcess) return
 
   if (!isBallControlledByEnemy(flightZone, flightHistory, mySide)) return
   return {

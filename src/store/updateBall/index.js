@@ -15,7 +15,9 @@ export default function(state: State): Ball {
   return pipe(
     [
       getFlightZone, // -> { flightZone }
-      updateFlightHistory,
+      didBallJustLeftMySide, // { ?ballJustLeftMySide }
+      // getFuturePositions,
+      updateFlightHistory, // -> { flightHistory, ?justEnteredAbyss }
       exitIfEnemyControl,
       findCollision, // -> { collision?: { collisionSource, velAfterCollision } }
       defineVelocity, // -> velocity
@@ -27,19 +29,49 @@ export default function(state: State): Ball {
 }
 
 
+
+function didBallJustLeftMySide({ flightZone, enemy, ball, mySide }) {
+  if (!enemy) return // -> no transfer required
+  return flightZone === 'abyss' &&
+  _.last(ball.flightHistory) === mySide &&
+  { ballJustLeftMySide: true }
+}
+
+
 function updateFlightHistory({ ball, flightZone }) {
   let fh = ball.flightHistory || []
   if (_.last(fh) !== flightZone) {
-    return { flightHistory: fh.concat(flightZone)}
+    return {
+      flightHistory: fh.concat(flightZone),
+    }
   }
   return { flightHistory: fh }
 }
 
 
-function defineVelocity({ collision, ball }) {
+// function getFuturePositions({ ballJustLeftMySide, ball }) {
+//   if (!ballJustLeftMySide) return
+//   let futurePositions = []
+//   let lastPos
+//   _.times(20, () => {
+//     getRoutineVel(ball)
+//     lastPos = [
+
+//     ]
+//   })
+// }
+
+
+// getFutureVelocitiesForSmoothTransfer
+
+function defineVelocity({ collision, ball, ballJustLeftMySide }) {
   return {
     velocity: getRoutineVel(
-      collision ? { ...ball, velocity: collision.velAfterCollision } : ball
+      {
+        position: ball.position,
+        velocity: collision ? collision.velAfterCollision : ball.velocity
+      },
+      ballJustLeftMySide || ball.transferInProcess // should i damp vel for smoother transfer?
     )
   }
 }
@@ -55,7 +87,7 @@ function definePosition({ ball, velocity }) {
 }
 
 
-function getResult({ ball, collision, velocity, position, flightHistory }) {
+function getResult({ ball, collision, velocity, position, flightHistory, ballJustLeftMySide }) {
 
   const newCollisionWith = collision && collision.collisionSource
 
@@ -64,16 +96,17 @@ function getResult({ ball, collision, velocity, position, flightHistory }) {
     ball.velocity[1] === 0 &&
     collision
   )
+
   let newProps = {
-    flightHistory,
     velocity,
     position,
     newCollisionWith,
     kickedFirstTime,
-    controlledByEnemy: false
+    flightHistory,
+    controlledByEnemy: false,
+    transferInProcess: ballJustLeftMySide ? true : ball.transferInProcess,
+    landed: newCollisionWith === 'ground' ? true: ball.landed
   }
   
-  if (newCollisionWith === 'ground') newProps.landed = true
-
   return { pipeResult: { ...ball, ...newProps } }
 }
