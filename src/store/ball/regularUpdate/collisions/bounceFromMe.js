@@ -1,6 +1,6 @@
 // @flow
 
-import { getSetting } from '../../../settings';
+import { getSetting } from '../../../../settings';
 import bounceIfOverlap from './utils/bounceIfOverlap';
 import pipe from 'pipeduce';
 

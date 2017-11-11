@@ -1,7 +1,7 @@
 // @flow
 
-import type { Settings } from '../../../../settings';
-import type { Ball } from '../../../../types';
+import type { Settings } from '../../../../../settings';
+import type { Ball } from '../../../../../types';
 
 // collision is found
 function bounceIfReachedFencePillar({

@@ -1,6 +1,6 @@
 // @flow
-import { getSetting } from '../../settings';
-import type { Ball } from '../../types';
+import { getSetting } from '../../../settings';
+import type { Ball } from '../../../types';
 
 export default function getFlightZone({ ball }: { ball: Ball }) {
   

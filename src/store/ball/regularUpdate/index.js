@@ -1,7 +1,7 @@
 // @flow
 
 import findCollision from './collisions/'
-import type { State, Ball } from '../../types'
+import type { State, Ball } from '../../../types'
 import pipe from 'pipeduce';
 import _ from 'lodash';
 import exitIfEnemyControl from './exitIfEnemyControl';
@@ -14,8 +14,7 @@ export default function(state: State): Ball {
   return pipe(
     [
       getFlightZone, // -> { flightZone }
-      didBallJustLeftMySide, // { ?ballJustLeftMySide }
-      // getFuturePositions,
+      didBallJustLeftMySide, // -> { ?ballJustLeftMySide }
       updateFlightHistory, // -> { flightHistory, ?justEnteredAbyss }
       exitIfEnemyControl,
       findCollision, // -> { collision?: { collisionSource, velAfterCollision } }

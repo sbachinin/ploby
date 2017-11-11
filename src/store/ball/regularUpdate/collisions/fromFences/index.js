@@ -3,7 +3,7 @@
 import pipe from 'pipeduce'
 import bounceIfReachedFenceTip from './bounceIfReachedFenceTip';
 import bounceIfReachedFencePillar from './bounceIfReachedFencePillar';
-import { getAllSettings, getSetting } from '../../../../settings';
+import { getAllSettings, getSetting } from '../../../../../settings';
 import findCirclesOverlap from '../utils/findCirclesOverlap';
 
 let collisionInProcess = false

@@ -4,7 +4,7 @@ import bounceFromMe from './bounceFromMe'
 import bounceFromFences from './fromFences/'
 import bounceFromWalls from './bounceFromWalls'
 import bounceFromGround from './bounceFromGround'
-import type { Ball, Myself, Enemy } from '../../../types'
+import type { Ball, Myself, Enemy } from '../../../../types'
 import type {Collision} from './CollisionType'
 import pipe from 'pipeduce'
 

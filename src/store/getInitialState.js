@@ -1,7 +1,7 @@
 // @flow
 
-import { getInitialPlayer } from './updateMyself/';
-import getNewBall from './updateBall/getNewBall'
+import getInitialPlayer from './myself/getInitialPlayer';
+import getNewBall from './ball/getNewBall'
 import type { State } from '../types';
 
 export default function(): State {

@@ -1,6 +1,6 @@
 // @flow
 
-import type { State } from '../../types';
+import type { State } from '../../../types';
 
 import getMyXVel from './getMyXVel'
 import getMyYVel from './getMyYVel'

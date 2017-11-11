@@ -2,11 +2,11 @@
 
 import xVelPipedFunctions from './xVelPipedFunctions';
 import pipe from 'pipeduce';
-import { getSetting } from '../../settings';
-import type { State } from '../../types';
+import { getSetting } from '../../../settings';
+import type { State } from '../../../types';
 
 export default (state : State): number => {
-  if (!state.canvasState || !state.keysState || !state.canvasState.myself) return [0, 0]
+  if (!state.canvasState || !state.keysState || !state.canvasState.myself) return 0
   const { leftKeyPressed, rightKeyPressed } = state.keysState
   const { position, velocity, leftLimit, rightLimit } = state.canvasState.myself
   if (!position || !velocity) return 0

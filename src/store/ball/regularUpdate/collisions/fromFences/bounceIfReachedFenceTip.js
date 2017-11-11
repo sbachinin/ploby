@@ -1,7 +1,7 @@
 // @flow
 
 import getBounceFromCircle from '../utils/getBounceFromCircle';
-import { getAllSettings } from '../../../../settings';
+import { getAllSettings } from '../../../../../settings';
 import pipe from 'pipeduce';
 
 function bounceIfReachedFenceTip({

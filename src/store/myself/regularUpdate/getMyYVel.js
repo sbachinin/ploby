@@ -1,7 +1,7 @@
 // @flow
-import { getSetting } from '../../settings'
-import pipe from 'pipeduce';
-import type { State } from '../../types';
+import { getSetting } from '../../../settings'
+import type { State } from '../../../types'
+import pipe from 'pipeduce'
 
 export default function(state: State): number {
 

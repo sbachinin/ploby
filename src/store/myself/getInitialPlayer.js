@@ -2,7 +2,7 @@
 import type { Myself } from '../../types';
 import { definePlayerLimits, getPlayerInitialPos } from '../../settings';
 
-export function getInitialPlayer(mySide: string) : Myself {
+export default function getInitialPlayer(mySide: string) : Myself {
   const limits = definePlayerLimits(mySide)
   return {
     velocity: [0, 0],

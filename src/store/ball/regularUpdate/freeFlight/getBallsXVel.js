@@ -1,7 +1,7 @@
 // @flow
 
-import { getSetting } from '../../../settings';
-import type { Ball } from '../../../types'
+import { getSetting } from '../../../../settings';
+import type { Ball } from '../../../../types'
 
 export default function(ball: Ball): number {
   const xD = getSetting('ball.xDamping')

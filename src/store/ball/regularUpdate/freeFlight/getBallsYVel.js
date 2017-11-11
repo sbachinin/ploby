@@ -1,6 +1,6 @@
 // @flow
 
-import { getSetting } from '../../../settings';
+import { getSetting } from '../../../../settings';
 
 export default function(velocity: Array<number>) : number {
 

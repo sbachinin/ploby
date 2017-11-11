@@ -1,5 +1,5 @@
 // @flow
-import { getSetting } from '../../../settings';
+import { getSetting } from '../../../../settings';
 
 type Args = {
   position: Array<number>, velocity: Array<number>

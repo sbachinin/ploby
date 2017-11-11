@@ -1,6 +1,6 @@
 // @flow
 import getRoutineVel from './freeFlight/getBallsRoutineVel';
-import { getSetting } from '../../settings';
+import { getSetting } from '../../../settings';
 
 let counter = 0
 

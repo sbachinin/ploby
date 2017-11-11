@@ -1,7 +1,7 @@
 // @flow
 
 import getMyVel from './getMyVel'
-import type { State, Myself } from '../../types';
+import type { State, Myself } from '../../../types';
 
 export default function(state: State): Myself {
 
@@ -18,5 +18,3 @@ export default function(state: State): Myself {
     ]
   }
 }
-
-export { getInitialPlayer } from './getInitialPlayer'

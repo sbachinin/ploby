@@ -1,3 +1,5 @@
+// @flow
+
 export default [
   relaxIfStanding,
   stopIfReachedLimit,
@@ -10,7 +12,7 @@ export default [
 
 function relaxIfStanding({
   myXVel, leftKeyPressed, rightKeyPressed
-}) {
+}: any) {
   if (myXVel === 0 && !leftKeyPressed && !rightKeyPressed) return {
     pipeResult: 0
   }
@@ -23,7 +25,7 @@ function stopIfReachedLimit({
   myXPos,
   leftKeyPressed,
   rightKeyPressed
-}) {
+}: any) {
   if (
     ((myXPos + 0.0001) >= rightLimit && !leftKeyPressed)
     ||
@@ -39,7 +41,7 @@ function accelerateIfKeyPressed({
   leftKeyPressed,
   myXVel,
   playerSettings
-}) {
+}: any) {
   if (rightKeyPressed) {
     if ((myXVel + playerSettings.xAcceleration) < playerSettings.maxXVel) {
       return { acceleratedXVel: myXVel + playerSettings.xAcceleration }
@@ -60,7 +62,7 @@ function dampIfKeyReleased({
   leftKeyPressed,
   myXVel,
   playerSettings
-}) {
+}: any) {
   if (rightKeyPressed || leftKeyPressed) return
   if (Math.abs(myXVel) < playerSettings.xDamping) {
     return { dampedXVel: 0 }
@@ -80,7 +82,7 @@ function reduceVelBeforeLimit({
   myXPos,
   leftLimit,
   rightLimit
-}) {
+}: any) {
   let vel = acceleratedXVel || dampedXVel || 0
   const nextPos = myXPos + vel
   if (nextPos > rightLimit) {
@@ -96,7 +98,7 @@ function getResult({
   lastXVelBeforeLimit,
   acceleratedXVel,
   dampedXVel
-}) {
+}: any) {
   return {
     pipeResult: lastXVelBeforeLimit ||
       acceleratedXVel ||
