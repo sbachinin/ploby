@@ -34,7 +34,13 @@ export default ( state: CanvasState,
         toPx(cw, getSetting('player.radius'))
       ),
       fillStyle: (() => {
-        if (key === 'ball') return '#a77a26'
+        if (key === 'ball')  {
+          if (
+            state[key].collisionsWithMeCount > getSetting('kicksLimit') ||
+            state[key].landed
+          ) return '#ccc'
+          return '#a77a26'
+        }
         if (key === 'enemy' && !state[key].absent) return '#38759b'
         if (key === 'enemy' && state[key].absent) return 'white'
         return '#8f5044'

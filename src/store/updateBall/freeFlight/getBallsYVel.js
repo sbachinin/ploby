@@ -2,19 +2,13 @@
 
 import { getSetting } from '../../../settings';
 
-export default function(velocity: Array<number>, shouldDampForSmoothTransfer: boolean) : number {
+export default function(velocity: Array<number>) : number {
 
   const yVel = velocity[1]
   const dir = getDirection(yVel)
-  const gravity = getSetting('ball.gravity') / (
-    shouldDampForSmoothTransfer ? 1.5 : 1
-  )
-  const yDampingOnRaise = getSetting('ball.yDampingOnRaise') + (
-    shouldDampForSmoothTransfer ? 0.01 : 0
-  )
-  const yAccelerationOnFall = getSetting('ball.yAccelerationOnFall') - (
-    shouldDampForSmoothTransfer ? 0.01 : 0
-  )
+  const gravity = getSetting('ball.gravity')
+  const yDampingOnRaise = getSetting('ball.yDampingOnRaise')
+  const yAccelerationOnFall = getSetting('ball.yAccelerationOnFall')
 
   switch (dir) {
     case 'GOING_UP':

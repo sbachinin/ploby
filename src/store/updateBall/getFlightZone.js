@@ -1,7 +1,6 @@
 // @flow
 import { getSetting } from '../../settings';
 import type { Ball } from '../../types';
-import _ from 'lodash';
 
 export default function getFlightZone({ ball }: { ball: Ball }) {
   

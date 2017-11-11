@@ -12,7 +12,7 @@ import handleMessagesFromServer from './handleMessagesFromServer';
 
 // const reconnectMessage = document.getElementById('reconnectMessage')
 
-let shit = 'prod'
+let shit = 'rod'
 
 const socketUrl = ( // create-r-a sets NODE_ENV to production if run build/deploy
   // process.env.NODE_ENV === 'production' ?

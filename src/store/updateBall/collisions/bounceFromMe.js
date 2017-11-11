@@ -15,11 +15,7 @@ export default function(ball: {}, myself: {}) : Array<number> {
       prepareCircle2, // -> { circle1, circle2 }
       bounceIfOverlap, // -> { bounceVel: [] }
       ensureSingleCollision,
-      _ => {
-        if (_.bounceVel) {
-          console.log('new collision')
-        }
-      },
+      dampVelIfOverKicked,
       ({bounceVel}) => ({ pipeResult: bounceVel })
     ],
     {
@@ -33,7 +29,7 @@ export default function(ball: {}, myself: {}) : Array<number> {
 
 
 function quitIfBallLanded({ ball }) {
-  if (ball.landed) return { pipeResult: null }
+  if (ball.landed || ball.collisionsWithMeCount > getSetting('kicksLimit')) return { pipeResult: null }
 }
 
 function prepareCircle2({ myself }) {
@@ -51,4 +47,12 @@ function ensureSingleCollision({ bounceVel }) {
   // next frame - still colliding
   if (bounceVel && collisionInProcess) return { pipeResult: null }
   if (!bounceVel) collisionInProcess = false
+}
+
+
+function dampVelIfOverKicked({ bounceVel, ball }) {
+  if (!bounceVel) return
+  if (ball.collisionsWithMeCount >= getSetting('kicksLimit')) return ({
+    pipeResult: [ bounceVel[0] / 3, bounceVel[1] / 3 ]
+  })
 }

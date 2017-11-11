@@ -24,19 +24,31 @@ body {
 }
 canvas {
   display: block;
-  background: url(bg.jpg);
+  background: url(wood.jpg);
   background-size: cover;
+  border: 1px solid #ccc;
 }
 
 
 #secondaryWindows > div {
-  display: none;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: all 0.1s ease-out;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
 }
 #secondaryWindows > div.visible {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 
@@ -56,7 +68,7 @@ canvas {
 #abyss {
   display: flex;
   justify-content: space-between;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #ADCCA5 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #bbb 100%);
 }
 #messages {
   position: absolute;
@@ -71,20 +83,20 @@ canvas {
 .fence {
   width: 3%;
   height: 100%;
-  background: #599ba7;
+  background: #85a8b9;
   border-top: 3px solid;
   border-top-left-radius: 5px;
-  border-color: #599ba7;
+  border-color: #85a8b9;
   border-top-right-radius: 5px;
   box-sizing: border-box;
 }
 
 .score {
   font-size: 60px;
-  color: #8a7b03;
+  color: #ce771a;
   position: absolute;
   top: 0;
-  opacity: 0.4;
+  opacity: 0.8;
   line-height: 1em;
 }
 #rightScore {
@@ -178,10 +190,11 @@ canvas {
 
 #gameOverWindow {
   z-index: 2;
-  opacity: 0.6;
+  opacity: 0.6 !important;
   width: 100vw;
   height: 100vh;
   background-size: cover;
+  background-position: 50% 50%;
   color: white;
   font-size: 18vw;
 }

@@ -5,10 +5,10 @@ import getBallsYVel from './getBallsYVel'
 import type { Ball } from '../../../types'
 
 // return ball's vel considering just normal 'physics'
-export default function(ball: Ball, shouldDampForSmoothTransfer: boolean) {
+export default function(ball: Ball) {
   return [
-    getBallsXVel(ball, shouldDampForSmoothTransfer),
-    getBallsYVel(ball.velocity, shouldDampForSmoothTransfer)
+    getBallsXVel(ball),
+    getBallsYVel(ball.velocity)
   ]
 }
 

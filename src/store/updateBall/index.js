@@ -1,13 +1,12 @@
 // @flow
 
 import findCollision from './collisions/'
-import getRoutineVel from './freeFlight/getBallsRoutineVel'
 import type { State, Ball } from '../../types'
 import pipe from 'pipeduce';
 import _ from 'lodash';
-// import { getSetting } from '../../settings';
 import exitIfEnemyControl from './exitIfEnemyControl';
 import getFlightZone from './getFlightZone';
+import defineVelocity from './defineVelocity';
 
 export default function(state: State): Ball {
   const { ball, enemy, myself } = state.canvasState
@@ -20,7 +19,7 @@ export default function(state: State): Ball {
       updateFlightHistory, // -> { flightHistory, ?justEnteredAbyss }
       exitIfEnemyControl,
       findCollision, // -> { collision?: { collisionSource, velAfterCollision } }
-      defineVelocity, // -> velocity
+      defineVelocity, // -> ?velocity
       definePosition, // -> position
       getResult
     ],
@@ -49,39 +48,16 @@ function updateFlightHistory({ ball, flightZone }) {
 }
 
 
-// function getFuturePositions({ ballJustLeftMySide, ball }) {
-//   if (!ballJustLeftMySide) return
-//   let futurePositions = []
-//   let lastPos
-//   _.times(20, () => {
-//     getRoutineVel(ball)
-//     lastPos = [
-
-//     ]
-//   })
-// }
-
-
-// getFutureVelocitiesForSmoothTransfer
-
-function defineVelocity({ collision, ball, ballJustLeftMySide }) {
-  return {
-    velocity: getRoutineVel(
-      {
-        position: ball.position,
-        velocity: collision ? collision.velAfterCollision : ball.velocity
-      },
-      ballJustLeftMySide || ball.transferInProcess // should i damp vel for smoother transfer?
-    )
-  }
-}
-
-
 function definePosition({ ball, velocity }) {
+  // when transition in process, sum only 1/3 of new velocity
+  let vel = velocity
+  if (ball.transferInProcess) vel = [
+    velocity[0] / 3, velocity[1] / 3
+  ]
   return {
     position: [
-      ball.position[0] + (velocity[0] || 0),
-      ball.position[1] + (velocity[1] || 0)
+      ball.position[0] + (vel[0] || 0),
+      ball.position[1] + (vel[1] || 0)
     ]
   }
 }
@@ -90,6 +66,10 @@ function definePosition({ ball, velocity }) {
 function getResult({ ball, collision, velocity, position, flightHistory, ballJustLeftMySide }) {
 
   const newCollisionWith = collision && collision.collisionSource
+
+  let collisionsWithMeCount = ball.collisionsWithMeCount || 0
+  if (newCollisionWith === 'player') collisionsWithMeCount++
+  if (ballJustLeftMySide) collisionsWithMeCount = 0
 
   const kickedFirstTime = !!(
     ball.velocity[0] === 0 &&
@@ -103,6 +83,7 @@ function getResult({ ball, collision, velocity, position, flightHistory, ballJus
     newCollisionWith,
     kickedFirstTime,
     flightHistory,
+    collisionsWithMeCount,
     controlledByEnemy: false,
     transferInProcess: ballJustLeftMySide ? true : ball.transferInProcess,
     landed: newCollisionWith === 'ground' ? true: ball.landed

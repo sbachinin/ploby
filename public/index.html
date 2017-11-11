@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
     <link rel="stylesheet" type="text/css" href="all.css">
     <title>Ploby</title>
   </head>
@@ -44,28 +44,30 @@
       </div>
   
   
-      <div id="canvasOverlay"
-        v-bind:class="{ visible: generalState.appPhase === 'playing' }"
-        v-bind:style="{
-          height: generalState.sizes.canvasHeight + 'px',
-          width: generalState.sizes.canvasWidth + 'px'
-        }"
+      <div v-bind:class="{ visible: generalState.appPhase === 'playing' }"
       >
-        <div class="score" id="leftScore">{{generalState.score[0]}}</div>
-        <div class="score" id="rightScore">{{generalState.score[1] }}</div>
-        <div id="abyss-wrapper">
-          <div id="abyss" v-bind:style="{
-            height: generalState.sizes.abyssHeight + 'px',
-            width: generalState.sizes.abyssWidth + 'px'
-          }">
-            <div class="fence" id="leftFence">
-            </div>
-            <div class="fence" id="rightFence">
-            </div>
-            <div id="messages">
-              <p v-show="!canvasState.enemy">waiting for enemy...</p>
-              <p v-show="canvasState.enemy && canvasState.enemy.absent">enemy connected but not playing</p>
-              <p v-show="generalState.reconnect">reconnecting...</p>
+        <div id="canvasOverlay"
+          v-bind:style="{
+            height: generalState.sizes.canvasHeight + 'px',
+            width: generalState.sizes.canvasWidth + 'px'
+          }"
+        >
+          <div class="score" id="leftScore">{{generalState.score[0]}}</div>
+          <div class="score" id="rightScore">{{generalState.score[1] }}</div>
+          <div id="abyss-wrapper">
+            <div id="abyss" v-bind:style="{
+              height: generalState.sizes.abyssHeight + 'px',
+              width: generalState.sizes.abyssWidth + 'px'
+            }">
+              <div class="fence" id="leftFence">
+              </div>
+              <div class="fence" id="rightFence">
+              </div>
+              <div id="messages">
+                <p v-show="!canvasState.enemy">waiting for enemy...</p>
+                <p v-show="canvasState.enemy && canvasState.enemy.absent">enemy connected but not playing</p>
+                <p v-show="generalState.reconnect">reconnecting...</p>
+              </div>
             </div>
           </div>
         </div>
