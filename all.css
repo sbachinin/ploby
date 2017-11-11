@@ -1,21 +1,60 @@
 body {
   overflow: hidden;
   font-family: 'Roboto Mono', monospace;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+#canvasWrapper {
+  position: absolute;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  height: 100vh;
 }
 canvas {
   display: block;
-  border: 1px solid gray;
-}
-#canvas-wrapper {
-  display: inline-block;
-  position: relative;
-  background: url(bg.jpg);
+  background: url(wood.jpg);
   background-size: cover;
+  border: 1px solid #ccc;
+}
+
+
+#secondaryWindows > div {
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease-out;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+#secondaryWindows > div.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+
+#canvasOverlay {
+  position: relative;
 }
 #abyss-wrapper {
   position: absolute;
@@ -23,14 +62,13 @@ canvas {
   align-items: flex-end;
   justify-content: center;
   z-index: 1;
-  bottom: 1px;
   width: 100%;
   height: 100%;
 }
 #abyss {
   display: flex;
   justify-content: space-between;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #ADCCA5 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #bbb 100%);
 }
 #messages {
   position: absolute;
@@ -38,39 +76,54 @@ canvas {
   width: 30%;
   padding: 0 2%;
   font-size: 12px;
-
+}
+#messages p {
+  margin: 0;
 }
 .fence {
-  width: 2%;
+  width: 3%;
   height: 100%;
-  background: #b48484;
+  background: #85a8b9;
   border-top: 3px solid;
   border-top-left-radius: 5px;
-  border-color: #b48484;
+  border-color: #85a8b9;
   border-top-right-radius: 5px;
   box-sizing: border-box;
 }
-.hidden { display: none !important; }
+
+.score {
+  font-size: 60px;
+  color: #ce771a;
+  position: absolute;
+  top: 0;
+  opacity: 0.8;
+  line-height: 1em;
+}
+#rightScore {
+  right: 6px
+}
+#leftScore {
+  left: 6px
+}
+
+
+
+
+
+
+
+
 #chooseSideWindow {
   background: rgba(0,0,0,0.7);
-  position: absolute;
-  z-index: 3;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-  text-align: center;
   color: peachpuff;
   font-size: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 #chooseSideWindow p {
   margin-top: 0;
   line-height: 1em;
-  margin-bottom: 10vh;
+  margin-bottom: 5vh;
 }
 #chooseSideWindow button {
   width: 200px;
@@ -90,33 +143,20 @@ canvas {
 #chooseSideWindow button.active, #chooseSideWindow button:hover {
   opacity: 1;
 }
-.score {
-  font-size: 40px;
-  color: #1b5a7f;
-  position: absolute;
-  top: 0;
-}
-#rightScore {
-  right: 10px
-}
-#leftScore {
-  left: 10px
-}
 
-#helloOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+
+
+
+
+
+
+#helloWindow {
+  width: 100vw;
+  height: 100vh;
   background: white;
   z-index: 20;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
-#helloOverlay p {
+#helloWindow p {
   font-size: 40px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: white;
@@ -126,6 +166,10 @@ canvas {
   line-height: 0.75em;
   padding: 0 10px 8px;
 }
+#playersImg {
+  height: 350px;
+  max-height: 50vh;
+}
 #preloaderWrapper {
   height: 50px;
   display: flex;
@@ -134,18 +178,33 @@ canvas {
   overflow: hidden;
 }
 
-#gameOverWindow {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-body > .maja { display: none }
+
+
+
+
+
+
+
+
+
+#gameOverWindow {
+  z-index: 2;
+  opacity: 0.6 !important;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: 50% 50%;
+  color: white;
+  font-size: 18vw;
+}
+#gameOverWindow.visible.winner {
+  background-image: url(nudeMaja.jpg);
+}
+#gameOverWindow.visible:not(.winner) {
+  background-image: url(dressedMaja.jpg);
+}
+#gameOverWindow p {
+  font-size: 20px;
+  margin: 0 10px;
+}
