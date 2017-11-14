@@ -24,7 +24,7 @@ export type Ball = {
   position: Array<number>,
   velocity: Array<number>,
   landed: boolean,
-  flightHistory: Array<'abyss' | 'left' | 'right'>
+  flightHistory: Array<'abyss' | 'left' | 'right'>,
   transferInProcess?: boolean
 }
 
@@ -38,7 +38,7 @@ export type Myself = {
 export type Enemy = {
   position: Array<number>,
   absent: boolean
-}
+} | void
 
 
 export type State = {

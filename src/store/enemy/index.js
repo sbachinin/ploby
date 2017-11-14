@@ -13,7 +13,7 @@ export default function(action: any, state: State) : Enemy {
     }
 
     case 'REMOVE_ENEMY': {
-      return null
+      return undefined
     }
 
     default: return canvasState.enemy

@@ -44,7 +44,7 @@
       </div>
   
   
-      <div v-bind:class="{ visible: generalState.appPhase === 'playing' }"
+      <div v-bind:class="{ visible: generalState.appPhase.match(/playing|unlocked|choose|over/) }"
       >
         <div id="canvasOverlay"
           v-bind:style="{
@@ -78,6 +78,16 @@
         visible: generalState.appPhase.match(/game over/),
         winner: generalState.appPhase.match(/win/)
       }">
+        <div id="winImage"
+          v-bind:class="{
+            visible: generalState.appPhase.match(/game over win/)
+          }"
+        ></div>
+        <div id="looseImage"
+          v-bind:class="{
+            visible: generalState.appPhase.match(/game over loose/)
+          }"
+        ></div>
         {{ generalState.appPhase.match(/win/) ? 'You win': 'You loose' }}
         <p>press any key or click to start new game</p>
       </div>

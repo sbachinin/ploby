@@ -15,6 +15,7 @@ export default function(side?: string): Ball {
   return {
     velocity: [ 0, 0 ],
     position,
-    landed: false
+    landed: false,
+    flightHistory: []
   }
 }

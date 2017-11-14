@@ -2,7 +2,7 @@
 
 import type { GeneralState } from '../types'
 
-export default function(action: any, state: GeneralState) {
+export default function(action: any, state: GeneralState): GeneralState {
   switch (action.type) {
 
     case 'SAVE_SIZES': {

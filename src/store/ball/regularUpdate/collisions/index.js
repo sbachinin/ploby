@@ -13,8 +13,6 @@ export default function({ball, myself, enemy, mySide}: {
 }) : { collision: ?Collision } {
 
   const collision = pipe([
-    // isBallOnMyHalf,
-    // exitIfEnemySide,
     getFirstCollision
   ], {
     ball, myself, enemy, mySide
@@ -22,22 +20,6 @@ export default function({ball, myself, enemy, mySide}: {
 
   return { collision }
 }
-
-
-// function isBallOnMyHalf({ ball, mySide }) {
-//   return {
-//     ballOnMySide: (ball.position[0] > 50 && mySide === 'right') ||
-//     (ball.position[0] <= 50 && mySide === 'left')
-//   }
-// }
-
-// function exitIfEnemySide({ ballOnMySide, enemy }) {
-//   // if ball is on enemy's side,
-//   // wait for his messages
-//   // instead of searching for collisions myself 
-  
-//   if (enemy && !ballOnMySide) return { pipeResult: null }
-// }
 
 
 function getFirstCollision({ ball, myself }) : { pipeResult: ?Collision } {

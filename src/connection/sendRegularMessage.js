@@ -2,7 +2,7 @@
 
 import { sendMessage } from './socket';
 import type { State } from '../types';
-import pick from 'lodash.pick';
+import _ from 'lodash';
 
 export default (state: State) => {
 
@@ -14,7 +14,7 @@ export default (state: State) => {
   }
 
   if (!state.canvasState.ball.controlledByEnemy && !state.canvasState.ball.transferInProcess) {
-    message.ball = pick(
+    message.ball = _.pick(
       state.canvasState.ball,
       ['velocity', 'position', 'newCollisionWith', 'kickedFirstTime']
     )
