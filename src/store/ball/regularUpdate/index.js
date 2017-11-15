@@ -47,10 +47,10 @@ function updateFlightHistory({ ball, flightZone }) {
 }
 
 
-function definePosition({ ball, velocity }) {
+function definePosition({ ball, velocity, ballJustLeftMySide }) {
   // when transition in process, sum only 1/3 of new velocity
   let vel = velocity
-  if (ball.transferInProcess) vel = [
+  if (ballJustLeftMySide || ball.transferInProcess) vel = [
     velocity[0] / 3, velocity[1] / 3
   ]
   return {

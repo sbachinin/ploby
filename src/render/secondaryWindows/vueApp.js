@@ -16,13 +16,18 @@ export default {
   },
   applyData(state: State) {
     if (!this.shouldUpdate(vueState, state)) return
-    console.log('should update vue');
     Object.assign(vueState, state)
   },
   shouldUpdate(vueState: {}, state: State) {
     // 
     if (!equal(vueState.generalState, state.generalState)) return true
-    if (!equal(vueState.canvasState.enemy, state.canvasState.enemy)) return true
+    const oldEnemy = vueState.canvasState.enemy
+    const newEnemy = state.canvasState.enemy
+    if (
+      (!oldEnemy && newEnemy) ||
+      (oldEnemy && !newEnemy) ||
+      (oldEnemy && newEnemy && oldEnemy.absent !== newEnemy.absent)
+    ) return true
   }
 }
 
